@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { motion, Variants } from "framer-motion";
 import { Link, useMatch } from "react-router-dom";
 
+const Title = styled.div``;
 const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
