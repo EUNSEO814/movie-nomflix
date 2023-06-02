@@ -22,7 +22,6 @@ const Nav = styled(motion.nav)`
   color: white;
 `;
 
-const Title = styled.div``;
 const Col = styled.div`
   display: flex;
   align-items: center;
