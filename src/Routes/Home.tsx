@@ -6,7 +6,7 @@ const Home = () => {
   console.log(data, isLoading);
   return (
     <div>
-      <h1 style={{ backgroundColor: "whitesmoke", height: "300vh" }}>home</h1>
+      <h1 style={{ backgroundColor: "whitesmoke", height: "200vh" }}>home</h1>
     </div>
   );
 };
