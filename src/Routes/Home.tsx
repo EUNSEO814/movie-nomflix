@@ -47,7 +47,7 @@ const Row = styled(motion.div)`
   gap: 5px;
   grid-template-columns: repeat(6, 1fr);
   margin-bottom: 5px;
-  position: absolute;
+  position: relative;
   width: 100%;
 `;
 
@@ -67,8 +67,16 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
 `;
 
 const Info = styled(motion.div)`
-  padding: 20px;
+  padding: 10px;
   background-color: ${(props) => props.theme.black.lighter};
+  opacity: 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  h4 {
+    text-align: center;
+    font-size: 18px;
+  }
 `;
 
 const rowVariants = {
@@ -90,6 +98,16 @@ const boxVariants = {
   hover: {
     scale: 1.1,
     y: -50,
+    transition: {
+      delay: 0.5,
+      duration: 0.3,
+      type: "tween",
+    },
+  },
+};
+const infoVariants = {
+  hover: {
+    opacity: 1,
     transition: {
       delay: 0.5,
       duration: 0.3,
@@ -157,7 +175,10 @@ const Home = () => {
                       transition={{ type: "tween" }}
                       bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
                     >
-                      <Info />
+                      <img />
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
                     </Box>
                   ))}
               </Row>
