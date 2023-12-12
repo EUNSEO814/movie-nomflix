@@ -8,6 +8,8 @@ import {
 } from "framer-motion";
 import { Link, useMatch } from "react-router-dom";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -56,11 +58,11 @@ const Item = styled.li`
   }
 `;
 
-const Search = styled.span`
+const Search = styled.form`
+  color: white;
   display: flex;
   align-items: center;
   position: relative;
-  color: white;
   svg {
     height: 25px;
   }
@@ -112,6 +114,10 @@ const navVariants: Variants = {
   },
 };
 
+interface IForm {
+  keyword: string;
+}
+
 const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useMatch("/");
@@ -141,6 +147,21 @@ const Header = () => {
       navAnimation.start("top");
     }
   });
+
+  const { register, handleSubmit, setFocus, reset } = useForm<IForm>();
+
+  const navigate = useNavigate();
+
+  const onValid = (data: IForm) => {
+    console.log(data);
+    // navigate에 state전달 하는 방법 navigate(to, { state: { key: value } });
+    navigate(`/search?keyword=${data.keyword}`, {
+      state: { key: data.keyword },
+    });
+    setFocus("keyword");
+    reset();
+  };
+
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
       <Col>
@@ -167,7 +188,7 @@ const Header = () => {
         </Items>
       </Col>
       <Col>
-        <Search>
+        <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -223 : 0 }}
@@ -183,6 +204,7 @@ const Header = () => {
             ></path>
           </motion.svg>
           <Input
+            {...register("keyword", { required: true, minLength: 2 })}
             initial={{ scaleX: 0 }}
             animate={inputAnimation}
             transition={{ type: "linear" }}
