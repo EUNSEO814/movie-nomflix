@@ -9,7 +9,7 @@ import {
 import { Link, useMatch } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -122,6 +122,7 @@ const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useMatch("/");
   const tvMatch = useMatch("tv");
+  const MovieMatch = useMatch("movie");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
@@ -183,6 +184,11 @@ const Header = () => {
           <Item>
             <Link to="tv">
               TV Show {tvMatch && <Circle layoutId="circle" />}
+            </Link>
+          </Item>
+          <Item>
+            <Link to="movie">
+              Movie {MovieMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
         </Items>

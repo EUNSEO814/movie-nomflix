@@ -40,8 +40,9 @@ const Overview = styled.p`
 `;
 
 const Slider = styled.div`
-  /* position: relative; */
+  position: relative;
   top: -100px;
+  padding: 0 60px;
 `;
 
 const Row = styled(motion.div)`
@@ -49,17 +50,19 @@ const Row = styled(motion.div)`
   gap: 5px;
   grid-template-columns: repeat(6, 1fr);
   margin-bottom: 5px;
-  position: relative;
+  /* position: relative; */
   width: 100%;
 `;
 
 const Box = styled(motion.div)<{ bgphoto: string }>`
   background-color: white;
-  height: 200px;
+  height: 160px;
   background-image: url(${(props) => props.bgphoto});
   background-size: cover;
+  /* background-repeat: no-repeat; */
   background-position: center center;
   font-size: 66px;
+  border-radius: 5px;
   cursor: pointer;
   &:first-child {
     transform-origin: center left;
@@ -140,7 +143,7 @@ const boxVariants = {
     scale: 1,
   },
   hover: {
-    scale: 1.1,
+    scale: 1.2,
     y: -50,
     transition: {
       delay: 0.5,
@@ -164,8 +167,10 @@ const offset = 6;
 
 const Home = () => {
   const navigate = useNavigate();
+
   const moviePathMatch: PathMatch<string> | null = useMatch("/movies/:id");
   // console.log(moviePathMatch);
+
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
