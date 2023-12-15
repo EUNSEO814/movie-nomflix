@@ -1,8 +1,10 @@
+import Categories from "../Components/Categories";
+
 const Movie = () => {
   return (
-    <div style={{ paddingTop: "100px" }}>
-      <h1>movie</h1>
-    </div>
+    <>
+      <Categories text="Top Movies" />
+    </>
   );
 };
 
