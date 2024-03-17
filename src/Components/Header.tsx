@@ -10,6 +10,7 @@ import { Link, useMatch } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useDetectClickOutside } from "react-detect-click-outside";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -18,7 +19,6 @@ const Nav = styled(motion.nav)`
   position: fixed;
   width: 100%;
   top: 0;
-
   font-size: 14px;
   padding: 20px 60px;
   color: white;
@@ -58,16 +58,6 @@ const Item = styled.li`
   }
 `;
 
-const Search = styled.form`
-  color: white;
-  display: flex;
-  align-items: center;
-  position: relative;
-  svg {
-    height: 25px;
-  }
-`;
-
 const Circle = styled(motion.span)`
   position: absolute;
   width: 5px;
@@ -80,8 +70,18 @@ const Circle = styled(motion.span)`
   background-color: ${(props) => props.theme.red};
 `;
 
+const Search = styled.form`
+  color: white;
+  display: flex;
+  align-items: center;
+  position: relative;
+  svg {
+    height: 25px;
+  }
+`;
+
 const Input = styled(motion.input)`
-  transform-origin: right center;
+  transform-origin: right center; // 변화가 시작하는 위치
   position: absolute;
   right: 0px;
   padding: 5px 10px;
@@ -126,6 +126,7 @@ const Header = () => {
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
+
   const toggleSearch = () => {
     if (searchOpen) {
       //trigger the close animation
@@ -140,6 +141,18 @@ const Header = () => {
     }
     setSearchOpen((prev) => !prev);
   };
+
+  // Search svg나 input 밖을 클릭해도 input창 닫히게 만들기
+  const closeSearch = () => {
+    inputAnimation.start({
+      scaleX: 0,
+    });
+    setSearchOpen(false);
+  };
+
+  const ref = useDetectClickOutside({
+    onTriggered: closeSearch,
+  });
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 80) {
@@ -193,7 +206,7 @@ const Header = () => {
           </Item>
         </Items>
       </Col>
-      <Col>
+      <Col ref={ref}>
         <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
@@ -209,6 +222,7 @@ const Header = () => {
               clipRule="evenodd"
             ></path>
           </motion.svg>
+
           <Input
             {...register("keyword", { required: true, minLength: 2 })}
             initial={{ scaleX: 0 }}
