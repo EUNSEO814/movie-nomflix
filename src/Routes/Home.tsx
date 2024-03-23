@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { IGetMoviesResult, getMovies } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "../utilities";
@@ -9,6 +9,7 @@ import { useMatch, PathMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   background: black;
+  padding-bottom: 200px;
 `;
 
 const Loader = styled.div`
@@ -42,27 +43,34 @@ const Overview = styled.p`
 const Slider = styled.div`
   position: relative;
   top: -100px;
-  padding: 0 60px;
 `;
 
 const Row = styled(motion.div)`
   display: grid;
   gap: 5px;
   grid-template-columns: repeat(6, 1fr);
-  margin-bottom: 5px;
-  /* position: relative; */
+  position: absolute;
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgphoto: string }>`
-  background-color: white;
-  height: 160px;
-  background-image: url(${(props) => props.bgphoto});
-  background-size: cover;
-  /* background-repeat: no-repeat; */
-  background-position: center center;
+// const Box = styled(motion.div)<{ bgphoto: string }>`
+//   background-color: white;
+//   background-image: url(${(props) => props.bgphoto});
+//   background-size: cover;
+//   background-position: center center;
+//   height: 200px;
+//   font-size: 66px;
+//   cursor: pointer;
+//   &:first-child {
+//     transform-origin: center left;
+//   }
+//   &:last-child {
+//     transform-origin: center right;
+//   }
+// `;
+const Box = styled(motion.div)`
+  height: 200px;
   font-size: 66px;
-  border-radius: 5px;
   cursor: pointer;
   &:first-child {
     transform-origin: center left;
@@ -72,6 +80,13 @@ const Box = styled(motion.div)<{ bgphoto: string }>`
   }
 `;
 
+const MovieImg = styled(motion.div)<{ bgphoto: string }>`
+  background-image: url(${(props) => props.bgphoto});
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+`;
 const Info = styled(motion.div)`
   padding: 10px;
   background-color: ${(props) => props.theme.black.lighter};
@@ -152,6 +167,17 @@ const boxVariants = {
     },
   },
 };
+
+const imgVariants = {
+  hover: {
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 0.3,
+      type: "tween",
+    },
+  },
+};
 const infoVariants = {
   hover: {
     opacity: 1,
@@ -171,10 +197,10 @@ const Home = () => {
   const moviePathMatch: PathMatch<string> | null = useMatch("/movies/:id");
   // console.log(moviePathMatch);
 
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
-    ["movies", "nowPlaying"],
-    getMovies
-  );
+  const { data, isLoading } = useQuery<IGetMoviesResult>({
+    queryKey: ["movies", "nowPlaying"],
+    queryFn: getMovies,
+  });
   // console.log(data, isLoading);
 
   const [index, setIndex] = useState(0);
@@ -243,8 +269,11 @@ const Home = () => {
                       whileHover="hover"
                       variants={boxVariants}
                       transition={{ type: "tween" }}
-                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                     >
+                      <MovieImg
+                        variants={imgVariants}
+                        bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                      />
                       <Info variants={infoVariants}>
                         <h4>{movie.title}</h4>
                       </Info>

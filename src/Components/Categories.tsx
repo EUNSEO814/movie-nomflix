@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Slick from "./Slick";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { IGetMoviesResult, getMovies } from "../api";
 import { makeImagePath } from "../utilities";
 
@@ -43,10 +43,10 @@ const SliderItem = styled.div<{ bgphoto: string }>`
 `;
 
 const Categories = ({ text }: ICategory) => {
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
-    ["movies", "nowPlaying"],
-    getMovies
-  );
+  const { data, isLoading } = useQuery<IGetMoviesResult>({
+    queryKey: ["movies", "nowPlaying"],
+    queryFn: getMovies,
+  });
   return (
     <Wrapper>
       <CategoryTitle>{text}</CategoryTitle>

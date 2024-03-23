@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { makeImagePath } from "../utilities";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { IGetTvShowResult, getTvShow } from "../api";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
@@ -168,10 +168,10 @@ const Tv = () => {
   const [leaving, setLeaving] = useState(false);
   const navigate = useNavigate();
 
-  const { data, isLoading } = useQuery<IGetTvShowResult>(
-    ["tvShow", "topRated"],
-    getTvShow
-  );
+  const { data, isLoading } = useQuery<IGetTvShowResult>({
+    queryKey: ["tvShow", "topRated"],
+    queryFn: getTvShow,
+  });
 
   const increaseIndex = () => {
     if (data) {
